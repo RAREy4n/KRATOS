@@ -1,6 +1,10 @@
 import { MongoClient, Db } from "mongodb"
 
-const client = new MongoClient(process.env.MONGODB_URI!)
+const uri = Bun.env.MONGODB_URI
+
+if (!uri) throw new Error("MONGODB_URI não definida no .env")
+
+const client = new MongoClient(uri)
 let db: Db
 
 export async function inicializarBanco() {
