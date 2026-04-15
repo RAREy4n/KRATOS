@@ -1,19 +1,54 @@
-import { Elysia } from "elysia"
-import { cors } from "@elysiajs/cors"
-import { staticPlugin } from "@elysiajs/static"
-import { inicializarBanco } from "./database"
-import { usuariosRoutes } from "./routes/usuarios"
+import { Elysia } from 'elysia'
+import { connectDatabase } from './infrastructure/database/connection'
+import { authRoutes } from './presentation/routes/auth.routes'
+import { childRoutes } from './presentation/routes/child.routes'
 
-await inicializarBanco()
+// Conectar ao banco de dados
+await connectDatabase()
 
+// Criar aplicação Elysia básica
 const app = new Elysia()
-    .use(cors())
-    .use(staticPlugin({ assets: "public", prefix: "/" }))
-    .use(usuariosRoutes)
-    .get("/api/health", () => ({
-        status: "online",
-        timestamp: new Date().toISOString()
-    }))
-    .listen(process.env.PORT ?? 3000)
+  
+  // Health check
+  .get('/', () => ({
+    name: 'Organiza18 API',
+    version: '1.0.0',
+    status: 'online',
+    timestamp: new Date().toISOString()
+  }))
+  
+  // Rotas
+  .use(authRoutes)
+  .use(childRoutes)
+  // Temporariamente comentado até resolver o problema
+  // .use(gameRoutes)
+  
+  // Tratamento de erros
+  .onError(({ code, error, set }) => {
+    console.error('Error:', error)
+    
+    if (code === 'NOT_FOUND') {
+      set.status = 404
+      return {
+        success: false,
+        error: {
+          code: 'NOT_FOUND',
+          message: 'Route not found'
+        }
+      }
+    }
+    
+    set.status = 500
+    return {
+      success: false,
+      error: {
+        code: 'INTERNAL_ERROR',
+        message: 'Internal server error'
+      }
+    }
+  })
+  
+  // Iniciar servidor
+  .listen(3001)
 
-console.log(`servidor rodando em http://localhost:${app.server?.port}`)
+console.log(`🦊 Server running at http://localhost:${app.server?.port}`)
