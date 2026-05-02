@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Login from './presentation/pages/login'
 import Cadastro from './presentation/pages/criarconta'
 import EscolhaPerfil from './presentation/pages/escolha_perfil'
@@ -13,7 +13,10 @@ export default function App() {
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/escolha_perfil" element={<EscolhaPerfil />} />
       <Route path="/criar_jogador" element={<CriarJogador />} />
-      <Route path="*" element={<Navigate to="/login" />} />
+
+      {/* fallback seguro */}
+      <Route path="*" element={<Index />} />
     </Routes>
+
   )
 }
