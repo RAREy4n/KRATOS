@@ -1,6 +1,6 @@
-
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import IconesDialog from '../components/icones_dialog'
 
 export default function AdicionarJogador() {
   const navigate = useNavigate()
@@ -9,6 +9,7 @@ export default function AdicionarJogador() {
   const [erro, setErro] = useState('')
   const [loading, setLoading] = useState(false)
   const [avatarIndex, setAvatarIndex] = useState(0)
+  const [dialogAberto, setDialogAberto] = useState(false)
 
   const avatares = ['🐶', '🐱', '🐼', '🐨', '🦊', '🐸', '🐵', '🦁']
 
@@ -83,6 +84,7 @@ export default function AdicionarJogador() {
       setLoading(false);
     }
   };
+
   // Drawer mobile
   useEffect(() => {
     const hamburgerBtn = document.getElementById('hamburgerBtn')
@@ -120,14 +122,14 @@ export default function AdicionarJogador() {
 
       {/* Nuvens e montanha */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
-      {[...Array(3)].map((_, i) => (
-        <img
-          key={i}
-          src="/imagem/Nuvens.svg"
-          className="animate-float"
-          alt=""
-        />
-      ))}
+        {[...Array(3)].map((_, i) => (
+          <img
+            key={i}
+            src="/imagem/Nuvens.svg"
+            className="animate-float"
+            alt=""
+          />
+        ))}
         <img
           src="/imagem/Montanha.svg"
           className="absolute bottom-0 w-[200%] md:w-full max-w-none left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 h-auto translate-y-[15%] md:translate-y-[40%] object-cover"
@@ -189,31 +191,35 @@ export default function AdicionarJogador() {
             <div className="flex flex-col items-center">
               <div className="relative w-[150px] h-[150px] md:w-[180px] md:h-[180px] bg-white rounded-full shadow-inner border-[4px] border-brand-btnBorder flex items-center justify-center mb-4">
                 <span className="text-6xl">{avatares[avatarIndex]}</span>
+                
                 <button
                   type="button"
                   onClick={avatarAnterior}
-                  aria-label="Avatar anterior"
-                  className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-brand-btnBg text-white rounded-full font-bold text-xl shadow-md hover:scale-110 transition-transform flex items-center justify-center border-2 border-white focus:outline-none focus:ring-4 focus:ring-brand-btnBg"
+                  className="absolute -left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-brand-btnBg text-white rounded-full font-bold text-xl shadow-md hover:scale-110 transition-transform flex items-center justify-center border-2 border-white"
                 >
                   &lt;
                 </button>
+                
                 <button
                   type="button"
                   onClick={proximoAvatar}
-                  aria-label="Próximo avatar"
-                  className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-brand-btnBg text-white rounded-full font-bold text-xl shadow-md hover:scale-110 transition-transform flex items-center justify-center border-2 border-white focus:outline-none focus:ring-4 focus:ring-brand-btnBg"
+                  className="absolute -right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-brand-btnBg text-white rounded-full font-bold text-xl shadow-md hover:scale-110 transition-transform flex items-center justify-center border-2 border-white"
                 >
                   &gt;
                 </button>
               </div>
-              <span className="text-brand-textDark font-bold text-lg md:text-xl bg-white/50 px-4 py-1 rounded-full shadow-sm">
+
+              <button
+                type="button"
+                onClick={() => setDialogAberto(true)}
+                className="text-brand-textDark font-bold text-lg md:text-xl bg-white/50 px-4 py-1 rounded-full shadow-sm hover:bg-white/80 transition-all"
+              >
                 Escolher avatar
-              </span>
+              </button>
             </div>
 
             {/* Campos */}
             <div className="flex-1 w-full flex flex-col space-y-6">
-
               <div>
                 <label htmlFor="playerName" className="block text-brand-textDark font-bold text-lg md:text-xl mb-2 ml-2">
                   Nome / Apelido:
@@ -245,9 +251,7 @@ export default function AdicionarJogador() {
                   max="99"
                 />
               </div>
-
             </div>
-
           </form>
 
           {/* Erro */}
@@ -285,6 +289,16 @@ export default function AdicionarJogador() {
           </button>
         </div>
       </div>
+
+      {/* Diálogo de ícones */}
+      <IconesDialog
+        aberto={dialogAberto}
+        onFechar={() => setDialogAberto(false)} // cancela
+        onSelecionar={(indice) => setAvatarIndex(indice)} // só destaca, não fecha
+        onConfirmar={() => setDialogAberto(false)} // confirma e fecha
+        avatares={avatares}
+        selecionado={avatarIndex}
+      />
     </div>
   )
 }

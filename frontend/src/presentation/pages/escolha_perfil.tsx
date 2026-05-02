@@ -1,4 +1,4 @@
-// src/pages/EscolhaPerfil.tsx
+
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -128,7 +128,9 @@ export default function EscolhaPerfil() {
           >
             Sair
           </button>
-          <button className="w-full sm:w-auto bg-brand-btnBg text-[#E3F4B9] rounded-full px-5 md:px-6 lg:px-8 py-3 font-bold text-[15px] md:text-[16px] lg:text-[20px] text-center leading-tight shadow-[0px_4px_0px_rgba(93,125,14,0.3)] hover:bg-[#7da02b] active:shadow-none active:translate-y-1 transition-all border-[2px] border-white/40 focus:outline-none focus:ring-4 focus:ring-brand-btnBorder shrink-0">
+          <button 
+          onClick={() => navigate('/relatorio')}
+          className="w-full sm:w-auto bg-brand-btnBg text-[#E3F4B9] rounded-full px-5 md:px-6 lg:px-8 py-3 font-bold text-[15px] md:text-[16px] lg:text-[20px] text-center leading-tight shadow-[0px_4px_0px_rgba(93,125,14,0.3)] hover:bg-[#7da02b] active:shadow-none active:translate-y-1 transition-all border-[2px] border-white/40 focus:outline-none focus:ring-4 focus:ring-brand-btnBorder shrink-0">
             RELATÓRIO DOS JOGADORES
           </button>
         </div>

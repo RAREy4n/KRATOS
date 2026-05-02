@@ -4,6 +4,7 @@ import Cadastro from './presentation/pages/criarconta'
 import EscolhaPerfil from './presentation/pages/escolha_perfil'
 import CriarJogador from './presentation/pages/criar_jogador'
 import Index from './presentation/pages/index'
+import Relatorio from './presentation/pages/relatorio'
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/escolha_perfil" element={<EscolhaPerfil />} />
       <Route path="/criar_jogador" element={<CriarJogador />} />
+      <Route path="/relatorio" element={<Relatorio />} />
 
       {/* fallback seguro */}
       <Route path="*" element={<Index />} />
