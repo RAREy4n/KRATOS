@@ -1,15 +1,14 @@
 import { Elysia } from 'elysia'
+import { cors } from '@elysiajs/cors'
 import { connectDatabase } from './infrastructure/database/connection'
 import { authRoutes } from './presentation/routes/auth.routes'
 import { childRoutes } from './presentation/routes/child.routes'
 
-// Conectar ao banco de dados
 await connectDatabase()
 
-// Criar aplicação Elysia básica
 const app = new Elysia()
+  .use(cors()) 
   
-  // Health check
   .get('/', () => ({
     name: 'Organiza18 API',
     version: '1.0.0',
@@ -20,8 +19,6 @@ const app = new Elysia()
   // Rotas
   .use(authRoutes)
   .use(childRoutes)
-  // Temporariamente comentado até resolver o problema
-  // .use(gameRoutes)
   
   // Tratamento de erros
   .onError(({ code, error, set }) => {

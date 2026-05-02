@@ -40,3 +40,14 @@ body {
     padding-right: 1rem;
   }
 }
+@keyframes floatSoft {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+}
+.animate-float {
+  animation: floatSoft 5s ease-in-out infinite;
+}

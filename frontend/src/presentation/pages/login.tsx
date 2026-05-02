@@ -1,4 +1,4 @@
-// src/pages/Login.tsx
+
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../../services/api'
@@ -42,7 +42,6 @@ export default function Login() {
         password: senha
       })
 
-      // Salvar token e dados do usuário
       localStorage.setItem('token', response.data.data.token)
       localStorage.setItem('user', JSON.stringify(response.data.data.user))
       
@@ -60,11 +59,14 @@ export default function Login() {
 
       {/* Nuvens e montanha */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
+      {[...Array(3)].map((_, i) => (
         <img
+          key={i}
           src="/imagem/Nuvens.svg"
-          className="absolute left-1/2 -translate-x-1/2 top-[15%] w-[130%] h-auto animate-[pulse_4s_ease-in-out_infinite]"
+          className="animate-float"
           alt=""
         />
+      ))}
         <img
           src="/imagem/Montanha.svg"
           className="absolute bottom-0 w-[200%] md:w-full max-w-none left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 h-auto translate-y-[15%] md:translate-y-[40%] object-cover"
