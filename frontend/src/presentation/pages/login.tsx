@@ -61,12 +61,12 @@ export default function Login() {
       {/* Nuvens e montanha */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
         <img
-          src="/img/Nuvens2.svg"
+          src="/imagem/Nuvens.svg"
           className="absolute left-1/2 -translate-x-1/2 top-[15%] w-[130%] h-auto animate-[pulse_4s_ease-in-out_infinite]"
           alt=""
         />
         <img
-          src="/img/montanha.svg"
+          src="/imagem/Montanha.svg"
           className="absolute bottom-0 w-[200%] md:w-full max-w-none left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 h-auto translate-y-[15%] md:translate-y-[40%] object-cover"
           alt=""
         />
@@ -75,7 +75,7 @@ export default function Login() {
       <div className="relative z-10 w-full max-w-[600px] px-4 mx-auto mt-12">
         <div className="bg-brand-cardBg rounded-[45px] px-6 md:px-12 pt-12 md:pt-16 pb-10 shadow-xl relative border-[3px] border-[#D6E2C6]/50">
           
-          <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-brand-inputBg border-[2px] border-brand-btnBorder rounded-full px-6 md:px-10 py-2 shadow-md">
+          <div className="absolute -top-7 left-1/2 -translate-x-1/2 bg-brand-inputBg border-2 border-brand-btnBorder rounded-full px-6 md:px-10 py-2 shadow-md">
             <h1 className="text-xl md:text-3xl font-bold text-brand-textDark whitespace-nowrap">BEM-VINDO!</h1>
           </div>
 

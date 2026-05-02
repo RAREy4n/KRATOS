@@ -1,22 +1,5 @@
-// src/pages/CriarJogador.tsx
-import { useEffect } from 'react'
-
+// src/pages/CriarJogador.ts
 export default function CriarJogador() {
-  useEffect(() => {
-    // Carregar Tailwind CDN e config
-    const tailwindScript = document.createElement('script')
-    tailwindScript.src = 'https://cdn.tailwindcss.com'
-    document.head.appendChild(tailwindScript)
-
-    const configScript = document.createElement('script')
-    configScript.src = '/tailwind-config.js'
-    document.head.appendChild(configScript)
-
-    return () => {
-      document.head.removeChild(tailwindScript)
-      document.head.removeChild(configScript)
-    }
-  }, [])
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
@@ -28,18 +11,17 @@ export default function CriarJogador() {
     <div className="bg-sky-gradient min-h-screen relative flex flex-col items-center overflow-hidden">
 
       {/* Nuvens e montanha */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
-        <img 
-          src="/img/Nuvens2.svg" 
-          className="absolute left-1/2 -translate-x-1/2 top-[15%] w-[130%] h-auto animate-[pulse_4s_ease-in-out_infinite]" 
-          alt="" 
-        />
-        <img 
-          src="/img/montanha.svg" 
-          className="absolute bottom-0 left-0 w-full h-auto translate-y-[40%] object-cover" 
-          alt="" 
-        />
-      </div>
+    <div className="absolute inset-0 pointer-events-none z-0">
+      <img 
+        src="/imagem/Nuvens.svg"
+        className="absolute top-10 left-1/2 -translate-x-1/2 w-full max-w-[800px]"
+      />
+      <img 
+        src="/imagem/Montanha.svg"
+        className="absolute bottom-0 w-full"
+      />
+    </div>
+
 
       {/* Header */}
       <header className="relative z-10 w-full max-w-[1200px] mx-auto px-6 md:px-10 pt-8 flex flex-row flex-wrap justify-between items-center md:items-start gap-5 md:gap-4 lg:gap-0">
