@@ -13,21 +13,6 @@ export default function AdicionarJogador() {
 
   const avatares = ['🐶', '🐱', '🐼', '🐨', '🦊', '🐸', '🐵', '🦁']
 
-  useEffect(() => {
-    const tailwindScript = document.createElement('script')
-    tailwindScript.src = 'https://cdn.tailwindcss.com'
-    document.head.appendChild(tailwindScript)
-
-    const configScript = document.createElement('script')
-    configScript.src = '/tailwind-config.js'
-    document.head.appendChild(configScript)
-
-    return () => {
-      document.head.removeChild(tailwindScript)
-      document.head.removeChild(configScript)
-    }
-  }, [])
-
   const avatarAnterior = () => {
     setAvatarIndex((prev) => (prev === 0 ? avatares.length - 1 : prev - 1))
   }
@@ -293,9 +278,9 @@ export default function AdicionarJogador() {
       {/* Diálogo de ícones */}
       <IconesDialog
         aberto={dialogAberto}
-        onFechar={() => setDialogAberto(false)} // cancela
-        onSelecionar={(indice) => setAvatarIndex(indice)} // só destaca, não fecha
-        onConfirmar={() => setDialogAberto(false)} // confirma e fecha
+        onFechar={() => setDialogAberto(false)} 
+        onSelecionar={(indice) => setAvatarIndex(indice)} 
+        onConfirmar={() => setDialogAberto(false)}
         avatares={avatares}
         selecionado={avatarIndex}
       />
