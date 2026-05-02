@@ -12,10 +12,14 @@ export default function CriarJogador() {
 
       {/* Nuvens e montanha */}
     <div className="absolute inset-0 pointer-events-none z-0">
-      <img 
-        src="/imagem/Nuvens.svg"
-        className="absolute top-10 left-1/2 -translate-x-1/2 w-full max-w-[800px]"
-      />
+      {[...Array(3)].map((_, i) => (
+        <img
+          key={i}
+          src="/imagem/Nuvens.svg"
+          className="animate-float"
+          alt=""
+        />
+      ))}
       <img 
         src="/imagem/Montanha.svg"
         className="absolute bottom-0 w-full"
