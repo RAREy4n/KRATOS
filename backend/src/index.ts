@@ -1,4 +1,5 @@
 import { Elysia } from 'elysia'
+import { cors } from '@elysiajs/cors'
 import { connectDatabase } from './infrastructure/database/connection'
 import { authRoutes } from './presentation/routes/auth.routes'
 import { childRoutes } from './presentation/routes/child.routes'
@@ -8,6 +9,7 @@ await connectDatabase()
 
 // Criar aplicação Elysia básica
 const app = new Elysia()
+  .use(cors())  // ← ADICIONAR ISSO
   
   // Health check
   .get('/', () => ({
@@ -20,8 +22,6 @@ const app = new Elysia()
   // Rotas
   .use(authRoutes)
   .use(childRoutes)
-  // Temporariamente comentado até resolver o problema
-  // .use(gameRoutes)
   
   // Tratamento de erros
   .onError(({ code, error, set }) => {

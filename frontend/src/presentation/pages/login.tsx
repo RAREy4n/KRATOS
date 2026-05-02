@@ -1,4 +1,4 @@
-// src/pages/Login.tsx
+
 import { useEffect, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../../services/api'
@@ -42,7 +42,6 @@ export default function Login() {
         password: senha
       })
 
-      // Salvar token e dados do usuário
       localStorage.setItem('token', response.data.data.token)
       localStorage.setItem('user', JSON.stringify(response.data.data.user))
       

@@ -1,11 +1,22 @@
 // src/pages/EscolhaPerfil.tsx
-import { useEffect, useRef } from 'react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+interface Jogador {
+  id: string
+  name: string
+  age: number
+  avatar: string | null
+  totalPoints: number
+  currentLevel: number
+}
 
 export default function EscolhaPerfil() {
-  const hamburgerBtnRef = useRef<HTMLButtonElement>(null)
-  const closeDrawerBtnRef = useRef<HTMLButtonElement>(null)
-  const mobileDrawerRef = useRef<HTMLDivElement>(null)
-  const drawerOverlayRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
+
+  const [jogadores, setJogadores] = useState<Jogador[]>([])
+  const [carregando, setCarregando] = useState(true)
+  const [nomeResponsavel, setNomeResponsavel] = useState('Responsável')
 
   useEffect(() => {
     const tailwindScript = document.createElement('script')
@@ -16,7 +27,6 @@ export default function EscolhaPerfil() {
     configScript.src = '/tailwind-config.js'
     document.head.appendChild(configScript)
 
-    // Scrollbar customizada
     const style = document.createElement('style')
     style.textContent = `
       .scrollbar-custom::-webkit-scrollbar { width: 6px; }
@@ -26,6 +36,14 @@ export default function EscolhaPerfil() {
     `
     document.head.appendChild(style)
 
+    const userData = localStorage.getItem('user')
+    if (userData) {
+      const user = JSON.parse(userData)
+      setNomeResponsavel(user.name || 'Responsável')
+    }
+
+    carregarJogadores()
+
     return () => {
       document.head.removeChild(tailwindScript)
       document.head.removeChild(configScript)
@@ -33,37 +51,33 @@ export default function EscolhaPerfil() {
     }
   }, [])
 
-  // Drawer mobile
-  useEffect(() => {
-    const hamburger = hamburgerBtnRef.current
-    const closeBtn = closeDrawerBtnRef.current
-    const drawer = mobileDrawerRef.current
-    const overlay = drawerOverlayRef.current
-
-    if (!hamburger || !closeBtn || !drawer || !overlay) return
-
-    const openDrawer = () => {
-      drawer.classList.remove('translate-x-full')
-      overlay.classList.remove('opacity-0', 'pointer-events-none')
-      overlay.classList.add('opacity-100', 'pointer-events-auto')
+  const carregarJogadores = async () => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await fetch('http://localhost:3001/children', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      const data = await response.json()
+      
+      if (data.success) {
+        setJogadores(data.data)
+      }
+    } catch (error) {
+      console.error('Erro ao carregar jogadores:', error)
+    } finally {
+      setCarregando(false)
     }
+  }
 
-    const closeDrawer = () => {
-      drawer.classList.add('translate-x-full')
-      overlay.classList.remove('opacity-100', 'pointer-events-auto')
-      overlay.classList.add('opacity-0', 'pointer-events-none')
-    }
+  const handleSair = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    navigate('/login')
+  }
 
-    hamburger.addEventListener('click', openDrawer)
-    closeBtn.addEventListener('click', closeDrawer)
-    overlay.addEventListener('click', closeDrawer)
-
-    return () => {
-      hamburger.removeEventListener('click', openDrawer)
-      closeBtn.removeEventListener('click', closeDrawer)
-      overlay.removeEventListener('click', closeDrawer)
-    }
-  }, [])
+  const avatares = ['🐶', '🐱', '🐼', '🐨', '🦊', '🐸', '🐵', '🦁']
 
   return (
     <div className="bg-sky-gradient min-h-screen relative flex flex-col items-center overflow-hidden">
@@ -93,12 +107,10 @@ export default function EscolhaPerfil() {
         >
           <div className="bg-[#F6FAE3] rounded-full pr-8 pl-16 py-3 shadow-md flex items-center border-[2px] border-white/40">
             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[70px] h-[70px] bg-gray-200 rounded-full border-[3px] border-white shadow-sm overflow-hidden flex items-center justify-center">
-              <span className="text-[10px] text-gray-500 text-center leading-tight">
-                Avatar<br />Resp.
-              </span>
+              <span className="text-2xl">👤</span>
             </div>
             <span className="text-brand-btnBg font-bold text-lg md:text-xl lg:text-2xl ml-4 truncate drop-shadow-sm max-w-[160px] md:max-w-[200px] lg:max-w-[250px] xl:max-w-none">
-              [Nome do responsável]
+              {nomeResponsavel}
             </span>
           </div>
           <div className="absolute -right-2 -bottom-2 w-9 h-9 bg-brand-btnBg text-[#E3F4B9] rounded-full flex items-center justify-center shadow-md border-2 border-white">
@@ -111,7 +123,7 @@ export default function EscolhaPerfil() {
         {/* Botões desktop */}
         <div className="hidden md:flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto mt-2 md:mt-0">
           <button
-            onClick={() => window.location.href = '/login'}
+            onClick={handleSair}
             className="w-full sm:w-auto bg-white/40 text-brand-textDark rounded-full px-5 md:px-6 lg:px-8 py-3 font-bold text-[16px] md:text-[18px] lg:text-[20px] shadow-sm hover:bg-white/70 active:scale-95 transition-all border-[2px] border-white/50 backdrop-blur-sm focus:outline-none focus:ring-4 focus:ring-white/50 shrink-0"
           >
             Sair
@@ -121,9 +133,8 @@ export default function EscolhaPerfil() {
           </button>
         </div>
 
-        {/* Hamburger */}
+        {/* Hamburger mantido */}
         <button
-          ref={hamburgerBtnRef}
           className="flex md:hidden flex-col items-center justify-center w-14 h-14 bg-white/40 border-[2px] border-white/50 rounded-full shadow-sm hover:bg-white/70 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-white/50 shrink-0"
           aria-label="Abrir menu"
         >
@@ -142,60 +153,56 @@ export default function EscolhaPerfil() {
           </h2>
 
           {/* Lista de jogadores */}
-          <div id="playersList" className="flex-1 overflow-y-auto scrollbar-custom pr-6 space-y-2 mt-2">
-            <div className="flex flex-col items-center justify-center h-full opacity-60 mt-12">
-              <p className="text-brand-textDark text-[24px] font-bold text-center leading-snug">
-                Nenhum jogador cadastrado.<br />Clique em "+" para adicionar!
-              </p>
-            </div>
+          <div className="flex-1 overflow-y-auto scrollbar-custom pr-6 space-y-2 mt-2">
+            {carregando ? (
+              <div className="flex flex-col items-center justify-center h-full opacity-60">
+                <p className="text-brand-textDark text-[24px] font-bold text-center">
+                  Carregando...
+                </p>
+              </div>
+            ) : jogadores.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full opacity-60 mt-12">
+                <p className="text-brand-textDark text-[24px] font-bold text-center leading-snug">
+                  Nenhum jogador cadastrado.<br />Clique em "+" para adicionar!
+                </p>
+              </div>
+            ) : (
+              jogadores.map((jogador, index) => (
+                <button
+                  key={jogador.id}
+                  className="w-full flex items-center gap-4 p-4 hover:bg-white/40 rounded-[24px] transition-colors cursor-pointer"
+                >
+                  <div className="w-[60px] h-[60px] bg-white rounded-full border-[3px] border-brand-btnBorder flex items-center justify-center text-3xl shadow-sm shrink-0">
+                    {jogador.avatar || avatares[index % avatares.length]}
+                  </div>
+                  <div className="text-left">
+                    <p className="text-brand-textDark font-bold text-xl">{jogador.name}</p>
+                    <p className="text-brand-textDark text-sm opacity-70">
+                      {jogador.age} anos • Nível {jogador.currentLevel} • {jogador.totalPoints} pts
+                    </p>
+                  </div>
+                </button>
+              ))
+            )}
           </div>
 
           {/* Botão adicionar */}
           <div className="mt-4 pt-2">
             <button
-              onClick={() => window.location.href = '/criar_jogador'}
+              onClick={() => navigate('/criar_jogador')}
               className="flex items-center group w-full px-2 py-3 hover:bg-white/40 rounded-[24px] transition-colors"
             >
               <div className="w-[55px] h-[55px] bg-brand-btnBg text-[#E3F4B9] rounded-[18px] flex items-center justify-center text-4xl font-bold shadow-md group-hover:scale-105 transition-transform">
                 <span className="relative -top-[3px] leading-none">+</span>
               </div>
-              <span className="text-brand-textDark font-bold text-[28px] ml-5">Adicionar jogadores</span>
+              <span className="text-brand-textDark font-bold text-[28px] ml-5">
+                Adicionar jogadores
+              </span>
             </button>
           </div>
 
         </div>
       </main>
-
-      {/* Drawer mobile */}
-      <div
-        ref={drawerOverlayRef}
-        className="fixed inset-0 bg-brand-textDark/40 backdrop-blur-sm z-[90] opacity-0 pointer-events-none transition-opacity duration-300 md:hidden"
-      ></div>
-
-      <div
-        ref={mobileDrawerRef}
-        className="fixed top-0 right-0 h-full w-[280px] bg-brand-cardBg shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 flex flex-col border-l-[3px] border-[#D6E2C6]/50 rounded-l-[40px] md:hidden"
-      >
-        <div className="flex justify-end p-6 pt-10">
-          <button
-            ref={closeDrawerBtnRef}
-            className="w-12 h-12 bg-white/50 text-brand-textDark rounded-full flex items-center justify-center font-black text-xl hover:bg-white/80 transition-all border-[2px] border-white/50 shadow-sm focus:outline-none focus:ring-4 focus:ring-white/50"
-          >
-            X
-          </button>
-        </div>
-        <div className="flex flex-col px-6 gap-6 mt-4">
-          <button
-            onClick={() => window.location.href = '/login'}
-            className="w-full bg-white/40 text-brand-textDark rounded-full px-6 py-4 font-bold text-[18px] shadow-sm hover:bg-white/70 active:scale-95 transition-all border-[2px] border-white/50 text-center focus:outline-none focus:ring-4 focus:ring-white/50"
-          >
-            Sair
-          </button>
-          <button className="w-full bg-brand-btnBg text-[#E3F4B9] rounded-[24px] px-6 py-5 font-bold text-[16px] text-center leading-tight shadow-[0px_4px_0px_rgba(93,125,14,0.3)] hover:bg-[#7da02b] active:shadow-none active:translate-y-1 transition-all border-[2px] border-white/40 focus:outline-none focus:ring-4 focus:ring-brand-btnBorder">
-            RELATÓRIO DOS JOGADORES
-          </button>
-        </div>
-      </div>
     </div>
   )
 }
