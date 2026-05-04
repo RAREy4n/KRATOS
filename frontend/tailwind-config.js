@@ -1,19 +1,17 @@
 tailwind.config = {
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['"Playpen Sans"', 'sans-serif'],
-      },
       colors: {
-        brand: {
-          cardBg: '#EFF3EA',
-          textDark: '#5D7D0E',
-          inputBg: '#E3F4B9',
-          inputBorder: '#8BAF35',
-          btnBg: '#8BAF35',
-          btnBorder: '#5D7D0E',
-        }
-      }
-    }
-  }
+        'brand-btnBg': '#8BAF35',
+        'brand-btnBorder': '#5D7D0E',
+        'brand-textDark': '#4A4A4A',
+        'brand-cardBg': '#F6FAE3',
+        'brand-inputBg': '#FFFFFF',
+        'brand-inputBorder': '#C5D99E',
+      },
+      backgroundImage: {
+        'sky-gradient': 'linear-gradient(to bottom, #87CEEB, #E0F7FA)',
+      },
+    },
+  },
 }

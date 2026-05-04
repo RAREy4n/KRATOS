@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { AVATARES } from '../components/avatares'
 
 interface Jogador {
   id: string
@@ -68,19 +69,23 @@ export default function Relatorio() {
   return (
     <div className="bg-sky-gradient min-h-screen relative flex flex-col items-center overflow-hidden">
 
-      {/* Fundo */}
+      {/* Nuvens e montanha */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
+      {[...Array(3)].map((_, i) => (
         <img
-          src="/img/Nuvens2.svg"
-          className="absolute left-1/2 -translate-x-1/2 top-[15%] w-[130%] h-auto animate-[pulse_4s_ease-in-out_infinite]"
+          key={i}
+          src="/imagem/Nuvens.svg"
+          className="animate-float"
           alt=""
         />
+      ))}
         <img
-          src="/img/montanha.svg"
-          className="absolute bottom-0 w-full h-auto translate-y-[40%] object-cover"
+          src="/imagem/Montanha.svg"
+          className="absolute bottom-0 w-[200%] md:w-full max-w-none left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 h-auto translate-y-[15%] md:translate-y-[40%] object-cover"
           alt=""
         />
       </div>
+
 
       {/* Header */}
       <header className="relative z-10 w-full max-w-[1200px] mx-auto px-6 md:px-10 pt-8 flex justify-between items-center">
@@ -127,9 +132,20 @@ export default function Relatorio() {
                 <tbody>
                   {ranking.map((jogador, index) => (
                     <tr key={jogador.id} className="border-b border-brand-inputBorder/50 hover:bg-white/30">
-                      <td className="py-3 px-4 font-bold">{index + 1}º</td>
                       <td className="py-3 px-4 flex items-center gap-3">
-                        <span className="text-2xl">{jogador.avatar || '🐶'}</span>
+                        {jogador.avatar ? (
+                          <img
+                            src={jogador.avatar}
+                            alt={jogador.name}
+                            className="w-10 h-10 object-cover rounded-full border-2 border-brand-btnBorder"
+                          />
+                        ) : (
+                          <img
+                            src={AVATARES[index % AVATARES.length].src}
+                            alt={AVATARES[index % AVATARES.length].alt}
+                            className="w-10 h-10 object-cover rounded-full border-2 border-brand-btnBorder"
+                          />
+                        )}
                         {jogador.name}
                       </td>
                       <td className="py-3 px-4">{jogador.age} anos</td>

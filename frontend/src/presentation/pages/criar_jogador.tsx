@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import IconesDialog from '../components/icones_dialog'
+import { AVATARES } from '../components/avatares'  // 👈 importando a lista de avatares
 
 export default function AdicionarJogador() {
   const navigate = useNavigate()
@@ -11,64 +12,79 @@ export default function AdicionarJogador() {
   const [avatarIndex, setAvatarIndex] = useState(0)
   const [dialogAberto, setDialogAberto] = useState(false)
 
-  const avatares = ['🐶', '🐱', '🐼', '🐨', '🦊', '🐸', '🐵', '🦁']
+  useEffect(() => {
+    const tailwindScript = document.createElement('script')
+    tailwindScript.src = 'https://cdn.tailwindcss.com'
+    document.head.appendChild(tailwindScript)
 
+    const configScript = document.createElement('script')
+    configScript.src = '/tailwind-config.js'
+    document.head.appendChild(configScript)
+
+    return () => {
+      document.head.removeChild(tailwindScript)
+      document.head.removeChild(configScript)
+    }
+  }, [])
+
+  // 👇 funções de navegação usando AVATARES
   const avatarAnterior = () => {
-    setAvatarIndex((prev) => (prev === 0 ? avatares.length - 1 : prev - 1))
+    setAvatarIndex((prev) => (prev === 0 ? AVATARES.length - 1 : prev - 1))
   }
 
   const proximoAvatar = () => {
-    setAvatarIndex((prev) => (prev === avatares.length - 1 ? 0 : prev + 1))
+    setAvatarIndex((prev) => (prev === AVATARES.length - 1 ? 0 : prev + 1))
   }
 
   const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setErro('');
+    event.preventDefault()
+    setErro('')
 
     if (!nome || !idade) {
-      setErro('Preencha todos os campos!');
-      return;
+      setErro('Preencha todos os campos!')
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token')
 
     if (!token) {
-      setErro('Você precisa fazer login primeiro!');
-      navigate('/login');
-      return;
+      setErro('Você precisa fazer login primeiro!')
+      navigate('/login')
+      return
     }
 
     try {
-      const response = await fetch("http://localhost:3001/children", {
-        method: "POST",
+      const response = await fetch('http://localhost:3001/children', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           name: nome,
-          age: parseInt(idade)
+          age: parseInt(idade),
+          avatar: AVATARES[avatarIndex].src,     // 👈 usando AVATARES
         }),
-      });
+      })
 
-      const data = await response.json();
+      const data = await response.json()
 
       if (!response.ok) {
-        setErro(data.error?.message || 'Erro ao criar jogador');
-        return;
+        setErro(data.error?.message || 'Erro ao criar jogador')
+        return
       }
 
-      console.log('Jogador criado:', data);
-      navigate('/escolha_perfil');
+      console.log('Jogador criado:', data)
+      navigate('/escolha_perfil')
     } catch (error) {
-      setErro('Erro de conexão com o servidor');
-      console.error(error);
+      setErro('Erro de conexão com o servidor')
+      console.error(error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   // Drawer mobile
   useEffect(() => {
@@ -104,16 +120,10 @@ export default function AdicionarJogador() {
 
   return (
     <div className="bg-sky-gradient min-h-screen relative flex flex-col items-center overflow-hidden">
-
       {/* Nuvens e montanha */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
         {[...Array(3)].map((_, i) => (
-          <img
-            key={i}
-            src="/imagem/Nuvens.svg"
-            className="animate-float"
-            alt=""
-          />
+          <img key={i} src="/imagem/Nuvens.svg" className="animate-float" alt="" />
         ))}
         <img
           src="/imagem/Montanha.svg"
@@ -162,7 +172,6 @@ export default function AdicionarJogador() {
       {/* Main */}
       <main className="relative z-10 w-[85%] md:w-full max-w-[850px] mx-auto mt-[4vh] flex-1 flex flex-col mb-10">
         <div className="bg-brand-cardBg rounded-[40px] md:rounded-[55px] px-5 md:px-12 py-10 shadow-xl border-[3px] border-[#D6E2C6]/50 flex flex-col">
-
           <h2 className="text-3xl md:text-4xl text-brand-btnBg font-bold text-center mb-6 md:mb-8 drop-shadow-sm">
             Registrando jogador
           </h2>
@@ -171,12 +180,14 @@ export default function AdicionarJogador() {
           </p>
 
           <form id="createPlayerForm" onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-8 md:gap-10 items-center justify-center">
-
             {/* Avatar */}
             <div className="flex flex-col items-center">
               <div className="relative w-[150px] h-[150px] md:w-[180px] md:h-[180px] bg-white rounded-full shadow-inner border-[4px] border-brand-btnBorder flex items-center justify-center mb-4">
-                <span className="text-6xl">{avatares[avatarIndex]}</span>
-                
+                <img
+                  src={AVATARES[avatarIndex].src}
+                  alt={AVATARES[avatarIndex].alt}
+                  className="w-24 h-24 object-contain rounded-full"
+                />
                 <button
                   type="button"
                   onClick={avatarAnterior}
@@ -184,7 +195,6 @@ export default function AdicionarJogador() {
                 >
                   &lt;
                 </button>
-                
                 <button
                   type="button"
                   onClick={proximoAvatar}
@@ -255,7 +265,6 @@ export default function AdicionarJogador() {
               {loading ? 'Criando...' : 'CRIAR JOGADOR'}
             </button>
           </div>
-
         </div>
       </main>
 
@@ -275,13 +284,13 @@ export default function AdicionarJogador() {
         </div>
       </div>
 
-      {/* Diálogo de ícones */}
+      {/* Diálogo de ícones (agora também usando AVATARES) */}
       <IconesDialog
         aberto={dialogAberto}
-        onFechar={() => setDialogAberto(false)} 
-        onSelecionar={(indice) => setAvatarIndex(indice)} 
+        onFechar={() => setDialogAberto(false)}
+        onSelecionar={(indice) => setAvatarIndex(indice)}
         onConfirmar={() => setDialogAberto(false)}
-        avatares={avatares}
+        avatares={AVATARES}        // 👈 passando a constante AVATARES
         selecionado={avatarIndex}
       />
     </div>

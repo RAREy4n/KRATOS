@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { AVATARES } from '../components/avatares';
 
 interface Jogador {
   id: string
@@ -77,7 +78,6 @@ export default function EscolhaPerfil() {
     navigate('/login')
   }
 
-  const avatares = ['🐶', '🐱', '🐼', '🐨', '🦊', '🐸', '🐵', '🦁']
 
   return (
     <div className="bg-sky-gradient min-h-screen relative flex flex-col items-center overflow-hidden">
@@ -109,7 +109,9 @@ export default function EscolhaPerfil() {
             <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[70px] h-[70px] bg-gray-200 rounded-full border-[3px] border-white shadow-sm overflow-hidden flex items-center justify-center">
               <span className="text-2xl">👤</span>
             </div>
-            <span className="text-brand-btnBg font-bold text-lg md:text-xl lg:text-2xl ml-4 truncate drop-shadow-sm max-w-[160px] md:max-w-[200px] lg:max-w-[250px] xl:max-w-none">
+            <span 
+            onClick={() => navigate('/responsavel')}
+            className="text-brand-btnBg font-bold text-lg md:text-xl lg:text-2xl ml-4 truncate drop-shadow-sm max-w-[160px] md:max-w-[200px] lg:max-w-[250px] xl:max-w-none">
               {nomeResponsavel}
             </span>
           </div>
@@ -174,8 +176,20 @@ export default function EscolhaPerfil() {
                   key={jogador.id}
                   className="w-full flex items-center gap-4 p-4 hover:bg-white/40 rounded-[24px] transition-colors cursor-pointer"
                 >
-                  <div className="w-[60px] h-[60px] bg-white rounded-full border-[3px] border-brand-btnBorder flex items-center justify-center text-3xl shadow-sm shrink-0">
-                    {jogador.avatar || avatares[index % avatares.length]}
+                  <div className="w-[60px] h-[60px] bg-white rounded-full border-[3px] border-brand-btnBorder flex items-center justify-center text-3xl shadow-sm shrink-0 overflow-hidden">
+                    {jogador.avatar ? (
+                      <img
+                        src={jogador.avatar}
+                        alt={jogador.name}
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    ) : (
+                      <img
+                        src={AVATARES[index % AVATARES.length].src}
+                        alt={AVATARES[index % AVATARES.length].alt}
+                        className="w-3/4 h-3/4 object-contain rounded-full"
+                      />
+                    )}
                   </div>
                   <div className="text-left">
                     <p className="text-brand-textDark font-bold text-xl">{jogador.name}</p>

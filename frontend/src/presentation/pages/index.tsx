@@ -1,9 +1,8 @@
-// src/pages/Index.tsx
+
 import { useEffect } from 'react'
-import { useSearchParams, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export default function Index() {
-  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -15,8 +14,10 @@ export default function Index() {
     configScript.src = '/tailwind-config.js'
     document.head.appendChild(configScript)
 
-    // Redirecionar após 3.5 segundos
-    const nextPage = searchParams.get('next') || '/login'
+    // Verifica se há token salvo
+    const token = localStorage.getItem('token')
+    const nextPage = token ? '/escolha_perfil' : '/login'
+
     const timer = setTimeout(() => {
       navigate(nextPage)
     }, 3500)
@@ -26,21 +27,19 @@ export default function Index() {
       document.head.removeChild(configScript)
       clearTimeout(timer)
     }
-  }, [navigate, searchParams])
+  }, [navigate])
 
   return (
     <div className="bg-sky-gradient min-h-screen relative flex flex-col items-center justify-center overflow-hidden">
-
-      {/* Nuvens e montanha */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
-      {[...Array(3)].map((_, i) => (
-        <img
-          key={i}
-          src="/imagem/Nuvens.svg"
-          className="animate-float"
-          alt=""
-        />
-      ))}
+        {[...Array(3)].map((_, i) => (
+          <img
+            key={i}
+            src="/imagem/Nuvens.svg"
+            className="animate-float"
+            alt=""
+          />
+        ))}
         <img
           src="/imagem/Montanha.svg"
           className="absolute bottom-0 w-[200%] md:w-full max-w-none left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 h-auto translate-y-[15%] md:translate-y-[40%] object-cover"
@@ -49,7 +48,6 @@ export default function Index() {
       </div>
 
       <div className="relative z-10 flex flex-col items-center">
-        
         <h1 className="text-5xl md:text-6xl font-bold text-white drop-shadow-lg mb-8 tracking-widest">
           Projeto 5
         </h1>
@@ -63,7 +61,6 @@ export default function Index() {
         <p className="text-brand-textDark font-bold mt-8 text-xl bg-white/60 px-6 py-2 rounded-full backdrop-blur-sm shadow-sm">
           Preparando sua aventura...
         </p>
-
       </div>
     </div>
   )

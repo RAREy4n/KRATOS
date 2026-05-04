@@ -24,10 +24,8 @@ const comparePassword = async (plain: string, hash: string): Promise<boolean> =>
 }
 
 const generateToken = (userId: string, role: string): string => {
-  // Corrigido: tipagem explícita para evitar erro de overload
   const payload = { userId, role }
   const options: jwt.SignOptions = { expiresIn: JWT_EXPIRES_IN as any }
-  
   return jwt.sign(payload, JWT_SECRET, options)
 }
 
@@ -44,49 +42,47 @@ const registerUseCase = new RegisterUseCase(userRepository, hashPassword)
 const loginUseCase = new LoginUseCase(userRepository, comparePassword, generateToken)
 
 export const authRoutes = new Elysia({ prefix: '/auth' })
-  
+
   // POST /auth/register
   .post('/register', async ({ body, set }) => {
     try {
       const validatedData = RegisterUserSchema.parse(body)
       const result = await registerUseCase.execute(validatedData)
-      
+
       set.status = 201
       return {
         success: true,
-        data: result
+        data: result,
       }
     } catch (error: any) {
       set.status = error instanceof DomainError ? error.statusCode : 400
-      
+
       if (error instanceof DomainError) {
         return {
           success: false,
           error: {
             code: error.code,
-            message: error.message
-          }
+            message: error.message,
+          },
         }
       }
-      
-      // Erro de validação do Zod
       if (error.errors) {
         return {
           success: false,
           error: {
             code: 'VALIDATION_ERROR',
             message: 'Validation failed',
-            details: error.errors
-          }
+            details: error.errors,
+          },
         }
       }
-      
+
       return {
         success: false,
         error: {
           code: 'INTERNAL_ERROR',
-          message: error.message || 'Internal server error'
-        }
+          message: error.message || 'Internal server error',
+        },
       }
     }
   }, {
@@ -95,96 +91,96 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
       email: t.String({ format: 'email' }),
       password: t.String({ minLength: 6 }),
       role: t.Optional(t.Enum({ parent: 'parent', child: 'child' })),
-      avatar: t.Optional(t.Nullable(t.String({ format: 'uri' })))
-    })
+      avatar: t.Optional(t.Nullable(t.String({ format: 'uri' }))),
+    }),
   })
-  
+
   // POST /auth/login
   .post('/login', async ({ body, set }) => {
     try {
       const validatedData = LoginUserSchema.parse(body)
       const result = await loginUseCase.execute(validatedData)
-      
+
       set.status = 200
       return {
         success: true,
-        data: result
+        data: result,
       }
     } catch (error: any) {
       set.status = error instanceof DomainError ? error.statusCode : 400
-      
+
       if (error instanceof DomainError) {
         return {
           success: false,
           error: {
             code: error.code,
-            message: error.message
-          }
+            message: error.message,
+          },
         }
       }
-      
+
       if (error.errors) {
         return {
           success: false,
           error: {
             code: 'VALIDATION_ERROR',
             message: 'Validation failed',
-            details: error.errors
-          }
+            details: error.errors,
+          },
         }
       }
-      
+
       return {
         success: false,
         error: {
           code: 'INTERNAL_ERROR',
-          message: error.message || 'Internal server error'
-        }
+          message: error.message || 'Internal server error',
+        },
       }
     }
   }, {
     body: t.Object({
       email: t.String({ format: 'email' }),
-      password: t.String()
-    })
+      password: t.String(),
+    }),
   })
-  
-  // GET /auth/me - Obter usuário atual
+
+  // GET /auth/me
   .get('/me', async ({ headers, set }) => {
     try {
       const authHeader = headers.authorization
-      
+
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         set.status = 401
         return {
           success: false,
           error: {
             code: 'UNAUTHORIZED',
-            message: 'No token provided'
-          }
+            message: 'No token provided',
+          },
         }
       }
-      
+
       const token = authHeader.substring(7)
-      
+
       try {
         const decoded: any = verifyToken(token)
         const user = await userRepository.findById(decoded.userId)
-        
+
         if (!user) {
           set.status = 404
           return {
             success: false,
             error: {
               code: 'USER_NOT_FOUND',
-              message: 'User not found'
-            }
+              message: 'User not found',
+            },
           }
         }
-        
+
         return {
           success: true,
-          data: user.toJSON()
+          data: user.toJSON(),
         }
       } catch (jwtError: any) {
         set.status = 401
@@ -192,8 +188,8 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
           success: false,
           error: {
             code: 'INVALID_TOKEN',
-            message: jwtError.message || 'Invalid or expired token'
-          }
+            message: jwtError.message || 'Invalid or expired token',
+          },
         }
       }
     } catch (error: any) {
@@ -202,8 +198,87 @@ export const authRoutes = new Elysia({ prefix: '/auth' })
         success: false,
         error: {
           code: 'INTERNAL_ERROR',
-          message: error.message || 'Internal server error'
+          message: error.message || 'Internal server error',
+        },
+      }
+    }
+  })
+
+  // PUT /auth/me
+  .put('/me', async ({ body, headers, set }) => {
+    try {
+      const authHeader = headers.authorization
+      if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        set.status = 401
+        return {
+          success: false,
+          error: {
+            code: 'UNAUTHORIZED',
+            message: 'No token provided',
+          },
         }
+      }
+
+      const token = authHeader.substring(7)
+      const decoded: any = jwt.verify(token, JWT_SECRET)
+      const user = await userRepository.findById(decoded.userId)
+
+      if (!user) {
+        set.status = 404
+        return {
+          success: false,
+          error: {
+            code: 'USER_NOT_FOUND',
+            message: 'User not found',
+          },
+        }
+      }
+
+      const { name, avatar } = body as any
+
+      if (name !== undefined || avatar !== undefined) {
+        user.updateProfile(
+          name !== undefined ? name : user.name,
+          avatar !== undefined ? avatar : user.avatar,
+        )
+        await userRepository.update(user)
+      }
+
+      return {
+        success: true,
+        data: user.toJSON(),
+      }
+    } catch (error: any) {
+      if (error.errors) {
+        set.status = 400
+        return {
+          success: false,
+          error: {
+            code: 'VALIDATION_ERROR',
+            message: 'Validation failed',
+            details: error.errors,
+          },
+        }
+      }
+
+      if (error instanceof DomainError) {
+        set.status = error.statusCode
+        return {
+          success: false,
+          error: {
+            code: error.code,
+            message: error.message,
+          },
+        }
+      }
+
+      set.status = 500
+      return {
+        success: false,
+        error: {
+          code: 'INTERNAL_ERROR',
+          message: error.message || 'Internal server error',
+        },
       }
     }
   })
