@@ -33,6 +33,20 @@ const ChildSchema = new mongoose.Schema({
     type: Number, 
     default: 1,
     min: 1
+  },
+  skills: {
+    aprender: {
+      level: { type: Number, default: 1, min: 1, max: 5 },
+      xp: { type: Number, default: 0 }
+    },
+    conversar: {
+      level: { type: Number, default: 1, min: 1, max: 5 },
+      xp: { type: Number, default: 0 }
+    },
+    jogar: {
+      level: { type: Number, default: 1, min: 1, max: 5 },
+      xp: { type: Number, default: 0 }
+    }
   }
 }, {
   timestamps: true,
