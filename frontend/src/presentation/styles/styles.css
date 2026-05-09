@@ -1,15 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;600;800&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --color-brand-btnBg: #8BAF35;
+  --color-brand-btnBorder: #5D7D0E;
+  --color-brand-textDark: #4A4A4A;
+  --color-brand-cardBg: #F6FAE3;
+  --color-brand-inputBg: #FFFFFF;
+  --color-brand-inputBorder: #C5D99E;
+  
+  --background-image-sky-gradient: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+}
 
 body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  font-family: 'Playpen Sans', sans-serif;
-}
-
-.bg-sky-gradient {
-  background: linear-gradient(to bottom, #9fc8d4 0%, #58bddb 100%);
+  font-family: 'Playpen Sans', cursive;
 }
 
 .bounce-delay-1 { animation: bounce 1.4s infinite ease-in-out both; animation-delay: -0.32s; }

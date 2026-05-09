@@ -11,18 +11,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    const tailwindScript = document.createElement('script')
-    tailwindScript.src = 'https://cdn.tailwindcss.com'
-    document.head.appendChild(tailwindScript)
-
-    const configScript = document.createElement('script')
-    configScript.src = '/tailwind-config.js'
-    document.head.appendChild(configScript)
-
-    return () => {
-      document.head.removeChild(tailwindScript)
-      document.head.removeChild(configScript)
-    }
+    // Scripts CDN removidos para performance (carregamento nativo)
   }, [])
 
   const handleSubmit = async (event: React.FormEvent) => {

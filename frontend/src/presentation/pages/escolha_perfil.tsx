@@ -20,14 +20,6 @@ export default function EscolhaPerfil() {
   const [nomeResponsavel, setNomeResponsavel] = useState('Responsável')
 
   useEffect(() => {
-    const tailwindScript = document.createElement('script')
-    tailwindScript.src = 'https://cdn.tailwindcss.com'
-    document.head.appendChild(tailwindScript)
-
-    const configScript = document.createElement('script')
-    configScript.src = '/tailwind-config.js'
-    document.head.appendChild(configScript)
-
     const style = document.createElement('style')
     style.textContent = `
       .scrollbar-custom::-webkit-scrollbar { width: 6px; }
@@ -46,8 +38,6 @@ export default function EscolhaPerfil() {
     carregarJogadores()
 
     return () => {
-      document.head.removeChild(tailwindScript)
-      document.head.removeChild(configScript)
       document.head.removeChild(style)
     }
   }, [])
@@ -174,6 +164,10 @@ export default function EscolhaPerfil() {
               jogadores.map((jogador, index) => (
                 <button
                   key={jogador.id}
+                  onClick={() => {
+                    localStorage.setItem('selectedChild', JSON.stringify(jogador))
+                    navigate('/')
+                  }}
                   className="w-full flex items-center gap-4 p-4 hover:bg-white/40 rounded-[24px] transition-colors cursor-pointer"
                 >
                   <div className="w-[60px] h-[60px] bg-white rounded-full border-[3px] border-brand-btnBorder flex items-center justify-center text-3xl shadow-sm shrink-0 overflow-hidden">

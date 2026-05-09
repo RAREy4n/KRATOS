@@ -6,14 +6,6 @@ export default function Index() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const tailwindScript = document.createElement('script')
-    tailwindScript.src = 'https://cdn.tailwindcss.com'
-    document.head.appendChild(tailwindScript)
-
-    const configScript = document.createElement('script')
-    configScript.src = '/tailwind-config.js'
-    document.head.appendChild(configScript)
-
     // Verifica se há token salvo
     const token = localStorage.getItem('token')
     const nextPage = token ? '/escolha_perfil' : '/login'
@@ -23,8 +15,6 @@ export default function Index() {
     }, 3500)
 
     return () => {
-      document.head.removeChild(tailwindScript)
-      document.head.removeChild(configScript)
       clearTimeout(timer)
     }
   }, [navigate])

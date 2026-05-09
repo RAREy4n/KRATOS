@@ -327,3 +327,23 @@ export const childRoutes = new Elysia({ prefix: '/children' })
       }
     }
   })
+  .post('/:id/score', async ({ params, body, set }) => {
+    try {
+      const { category, points } = body as { category: 'aprender' | 'conversar' | 'jogar', points: number }
+      const { ChildModel } = await import('../../infrastructure/database/models/child.model')
+      const childDoc = await ChildModel.findById(params.id)
+      if (!childDoc) { set.status = 404; return { success: false, message: 'Child not found' }; }
+      childDoc.totalPoints += points;
+      const cat = category as any;
+      if (childDoc.skills && childDoc.skills[cat]) {
+        childDoc.skills[cat].xp += points;
+        const newLevel = Math.min(5, Math.floor(childDoc.skills[cat].xp / 100) + 1);
+        if (newLevel > childDoc.skills[cat].level) childDoc.skills[cat].level = newLevel;
+      }
+      childDoc.currentLevel = Math.floor(childDoc.totalPoints / 500) + 1;
+      await childDoc.save();
+      return { success: true, data: { totalPoints: childDoc.totalPoints, currentLevel: childDoc.currentLevel, skills: childDoc.skills } };
+    } catch (error: any) { set.status = 500; return { success: false, message: error.message }; }
+  }, {
+    body: t.Object({ category: t.String(), points: t.Number() })
+  })
