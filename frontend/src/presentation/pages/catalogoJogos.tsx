@@ -90,8 +90,8 @@ export default function CatalogoJogos() {
 
       <header className="relative z-10 w-full max-w-[1200px] mx-auto px-6 md:px-10 pt-4 flex justify-between items-center">
         <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/')} className="bg-white/40 text-brand-textDark rounded-full px-5 py-2 font-bold border border-white/40 hover:bg-white/60 transition-all shadow-sm">← Voltar</button>
-            <div className="animate-swing cursor-pointer" onClick={() => navigate('/')}>
+            <button onClick={() => navigate('/categorias')} className="bg-white/40 text-brand-textDark rounded-full px-5 py-2 font-bold border border-white/40 hover:bg-white/60 transition-all shadow-sm">← Voltar</button>
+            <div className="animate-swing cursor-pointer" onClick={() => navigate('/categorias')}>
                 <img src="/imagem/logo.png" alt="KidQuest Logo" className="h-16 md:h-24" style={{ mixBlendMode: 'multiply' }} />
             </div>
         </div>

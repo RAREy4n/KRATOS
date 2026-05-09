@@ -70,28 +70,12 @@ export default function EscolhaPerfil() {
 
 
   return (
-    <div className="bg-sky-gradient min-h-screen relative flex flex-col items-center overflow-hidden">
-
-      {/* Nuvens e montanha */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0" aria-hidden="true">
-      {[...Array(3)].map((_, i) => (
-        <img
-          key={i}
-          src="/imagem/Nuvens.svg"
-          className="animate-float"
-          alt=""
-        />
-      ))}
-        <img
-          src="/imagem/Montanha.svg"
-          className="absolute bottom-0 w-[200%] md:w-full max-w-none left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 h-auto translate-y-[15%] md:translate-y-[40%] object-cover"
-          alt=""
-        />
-      </div>
-
+    <div className="min-h-screen relative flex flex-col items-center overflow-hidden">
+      
       {/* Header */}
       <header className="relative z-10 w-full max-w-[1200px] mx-auto px-6 md:px-10 pt-8 flex flex-row flex-wrap justify-between items-center md:items-start gap-5 md:gap-4 lg:gap-0">
         <button
+          onClick={() => navigate('/responsavel')}
           className="relative cursor-pointer hover:scale-[1.02] transition-transform focus:outline-none focus:ring-4 focus:ring-white/50 rounded-full"
           aria-label="Editar perfil do responsável"
         >
@@ -100,7 +84,6 @@ export default function EscolhaPerfil() {
               <span className="text-2xl">👤</span>
             </div>
             <span 
-            onClick={() => navigate('/responsavel')}
             className="text-brand-btnBg font-bold text-lg md:text-xl lg:text-2xl ml-4 truncate drop-shadow-sm max-w-[160px] md:max-w-[200px] lg:max-w-[250px] xl:max-w-none">
               {nomeResponsavel}
             </span>
@@ -166,7 +149,7 @@ export default function EscolhaPerfil() {
                   key={jogador.id}
                   onClick={() => {
                     localStorage.setItem('selectedChild', JSON.stringify(jogador))
-                    navigate('/')
+                    navigate('/categorias')
                   }}
                   className="w-full flex items-center gap-4 p-4 hover:bg-white/40 rounded-[24px] transition-colors cursor-pointer"
                 >
