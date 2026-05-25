@@ -52,6 +52,7 @@ export default function FirstLetterGame() {
       setIsCorrect(true)
       setScore(s => s + 1)
       const audio = new Audio('/jogos/som/acerto.mp3')
+      audio.volume = 0.3
       audio.play().catch(() => {})
       setTimeout(() => {
         if (score < 4) generateLevel()
@@ -60,6 +61,7 @@ export default function FirstLetterGame() {
     } else {
       setIsCorrect(false)
       const audio = new Audio('/jogos/som/erro.mp3')
+      audio.volume = 0.3
       audio.play().catch(() => {})
       setTimeout(() => setIsCorrect(null), 1000)
     }

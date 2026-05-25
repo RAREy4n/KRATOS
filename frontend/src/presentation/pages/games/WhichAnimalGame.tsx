@@ -32,6 +32,7 @@ export default function WhichAnimalGame() {
 
   const playSound = (type: 'acerto' | 'erro' | 'parabens-song') => {
     const audio = new Audio(`/jogos/som/${type}.mp3`)
+    audio.volume = 0.3
     audio.play().catch(e => console.log('Audio play failed', e))
   }
 
@@ -80,7 +81,7 @@ export default function WhichAnimalGame() {
       </div>
 
       <header className="relative z-10 w-full max-w-[1200px] mx-auto px-6 pt-8 flex justify-between items-center">
-        <button onClick={() => navigate('/')} className="bg-white/30 backdrop-blur-md text-brand-textDark rounded-full px-6 py-2 font-bold border border-white/40 hover:scale-105 transition-all">← Voltar</button>
+        <button onClick={() => navigate('/catalogo/jogar')} className="bg-white/30 backdrop-blur-md text-brand-textDark rounded-full px-6 py-2 font-bold border border-white/40 hover:scale-105 transition-all">← Voltar</button>
         <h1 className="text-3xl md:text-5xl font-black text-white drop-shadow-lg">Qual o Animal?</h1>
         <div className="w-24"></div>
       </header>
@@ -132,7 +133,7 @@ export default function WhichAnimalGame() {
             <h2 className="text-4xl font-black text-brand-textDark mb-2">INCRÍVEL!</h2>
             <p className="text-xl text-brand-textDark/80 mb-8 font-medium">Você conhece todos os animais da fazenda!</p>
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/catalogo/jogar')}
               className="w-full bg-brand-btnBg text-white rounded-2xl py-4 font-black text-xl shadow-[0_6px_0_#5d7d0e] hover:brightness-110 active:translate-y-1 active:shadow-none transition-all"
             >
               VOLTAR AO INÍCIO

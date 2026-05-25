@@ -29,6 +29,7 @@ export default function MemoryGame() {
   // Audio refs
   const playSound = (type: 'acerto' | 'erro' | 'parabens' | 'ploc') => {
     const audio = new Audio(`/jogos/som/${type}.mp3`)
+    audio.volume = 0.3
     audio.play().catch(e => console.log('Audio play failed', e))
   }
 
@@ -126,7 +127,7 @@ export default function MemoryGame() {
       {/* Header */}
       <header className="relative z-10 w-full max-w-[1200px] mx-auto px-6 pt-8 flex justify-between items-center">
         <button 
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/catalogo/jogar')}
           className="bg-white/30 backdrop-blur-md text-brand-textDark rounded-full px-6 py-2 font-bold border border-white/40 hover:scale-105 transition-all"
         >
           ← Voltar
@@ -187,7 +188,7 @@ export default function MemoryGame() {
                 JOGAR NOVAMENTE
               </button>
               <button
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/catalogo/jogar')}
                 className="w-full bg-sky-400 text-white rounded-2xl py-4 font-black text-xl shadow-[0_6px_0_#0284c7] hover:brightness-110 active:translate-y-1 active:shadow-none transition-all"
               >
                 VOLTAR AO INÍCIO

@@ -36,6 +36,7 @@ export default function SentenceGame() {
 
   const playSound = (item: string) => {
     const audio = new Audio(`/jogos/som/monta-frase/${item}.mp3`)
+    audio.volume = 0.3
     audio.play().catch(e => console.log('Audio play failed', e))
   }
 
@@ -55,7 +56,7 @@ export default function SentenceGame() {
       </div>
 
       <header className="relative z-10 w-full max-w-[1200px] mx-auto px-6 pt-8 flex justify-between items-center">
-        <button onClick={() => navigate('/')} className="bg-white/30 backdrop-blur-md text-brand-textDark rounded-full px-6 py-2 font-bold border border-white/40 hover:scale-105 transition-all">← Voltar</button>
+        <button onClick={() => navigate('/catalogo/conversar')} className="bg-white/30 backdrop-blur-md text-brand-textDark rounded-full px-6 py-2 font-bold border border-white/40 hover:scale-105 transition-all">← Voltar</button>
         <h1 className="text-3xl md:text-5xl font-black text-white drop-shadow-lg">Montar Frases</h1>
         <div className="w-24"></div>
       </header>

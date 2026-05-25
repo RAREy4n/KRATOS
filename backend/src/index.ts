@@ -3,6 +3,7 @@ import { cors } from '@elysiajs/cors'
 import { connectDatabase } from './infrastructure/database/connection'
 import { authRoutes } from './presentation/routes/auth.routes'
 import { childRoutes } from './presentation/routes/child.routes'
+import { gameRoutes } from './presentation/routes/game.routes'
 
 await connectDatabase()
 
@@ -19,6 +20,7 @@ const app = new Elysia()
   // Rotas
   .use(authRoutes)
   .use(childRoutes)
+  .use(gameRoutes)
   
   // Tratamento de erros
   .onError(({ code, error, set }) => {

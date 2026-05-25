@@ -19,6 +19,7 @@ const JOGOS: Jogo[] = [
   { id: 'contagem', titulo: 'Contando Frutinhas', descricao: 'Quantas maçãs você consegue contar na árvore?', categoria: 'aprender', tipo: 'matemática', idadeMin: 3, idadeMax: 7, icone: '🍎', path: '/jogos/contagem' },
   { id: 'cores', titulo: 'Mistura de Cores', descricao: 'Seja um pequeno artista criando novas cores!', categoria: 'aprender', tipo: 'arte', idadeMin: 4, idadeMax: 8, icone: '🎨', path: '/jogos/cores' },
   { id: 'formas', titulo: 'Formas Geométricas', descricao: 'Você consegue encontrar as formas escondidas?', categoria: 'aprender', tipo: 'geometria', idadeMin: 3, idadeMax: 6, icone: '📐', path: '/jogos/formas' },
+  { id: 'robo-pizzaiolo', titulo: 'Pizzaria Code', descricao: 'Aprenda a programar fazendo pizzas e entregando pedidos!', categoria: 'aprender', tipo: 'programação', idadeMin: 8, idadeMax: 18, icone: '🍕', path: 'http://localhost:5174' },
   
   // CONVERSAR
   { id: 'abc', titulo: 'ABC & Números', descricao: 'Aprenda o alfabeto e os números de forma divertida!', categoria: 'conversar', tipo: 'leitura', idadeMin: 3, idadeMax: 6, icone: '🔤', path: '/jogos/abc' },
@@ -62,6 +63,13 @@ export default function CatalogoJogos() {
       navigate('/escolha_perfil')
       return
     }
+    
+    // Se for um link externo (como o Zeus), abre em nova aba
+    if (path.startsWith('http')) {
+      window.open(`${path}?childId=${selectedChild.id}`, '_blank', 'noopener,noreferrer')
+      return
+    }
+    
     navigate(path)
   }
 
@@ -74,9 +82,9 @@ export default function CatalogoJogos() {
   const jogosFiltrados = JOGOS.filter(j => j.categoria === categoria)
 
   const TITULOS_CATEGORIA: Record<string, string> = {
-    aprender: 'Sala de Aprender ✨',
-    conversar: 'Sala de Conversar 🗣️',
-    jogar: 'Sala de Jogar 🎮'
+    aprender: 'Raciocínio & Lógica 🧠',
+    conversar: 'Linguagem & Comunicação 💬',
+    jogar: 'Foco & Coordenação 🎯'
   }
 
   return (

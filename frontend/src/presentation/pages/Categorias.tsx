@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { BrainCircuit, MessageCircleHeart, Target } from 'lucide-react'
 
 export default function Categorias() {
   const navigate = useNavigate()
@@ -20,24 +21,24 @@ export default function Categorias() {
   const categorias = [
     {
       id: 'aprender',
-      titulo: 'Aprender',
-      imagem: '/imagem/cat_aprender.png',
+      titulo: 'Raciocínio & Lógica 🧠',
+      icone: <BrainCircuit size={120} className="text-[#F57F17]" strokeWidth={1.5} />,
       cor: 'bg-[#FFEB3B]',
       borda: 'border-[#FBC02D]',
       texto: 'text-[#F57F17]'
     },
     {
       id: 'conversar',
-      titulo: 'Conversar',
-      imagem: '/imagem/cat_conversar.png',
+      titulo: 'Linguagem & Comunicação 💬',
+      icone: <MessageCircleHeart size={120} className="text-[#1B5E20]" strokeWidth={1.5} />,
       cor: 'bg-[#4CAF50]',
       borda: 'border-[#388E3C]',
       texto: 'text-[#1B5E20]'
     },
     {
       id: 'jogar',
-      titulo: 'Jogar',
-      imagem: '/imagem/cat_jogar.png',
+      titulo: 'Foco & Coordenação 🎯',
+      icone: <Target size={120} className="text-[#0D47A1]" strokeWidth={1.5} />,
       cor: 'bg-[#2196F3]',
       borda: 'border-[#1976D2]',
       texto: 'text-[#0D47A1]'
@@ -77,18 +78,14 @@ export default function Categorias() {
                 w-full aspect-square max-w-[320px] bg-white rounded-[50px] p-6
                 border-[10px] border-white shadow-2xl transition-all duration-300
                 group-hover:scale-105 group-hover:rotate-2
+                flex items-center justify-center
               `}>
-                <img
-                  src={cat.imagem}
-                  alt={cat.titulo}
-                  className="w-full h-full object-contain"
-                  style={{ mixBlendMode: 'multiply' }}
-                />
+                {cat.icone}
               </div>
               <span className={`
-                mt-6 text-4xl md:text-5xl font-black ${cat.texto} drop-shadow-sm
-                bg-white px-8 py-2 rounded-full border-4 border-white shadow-lg
-                transition-all group-hover:-translate-y-2
+                mt-6 text-2xl md:text-3xl font-black ${cat.texto} drop-shadow-sm text-center
+                bg-white px-8 py-3 rounded-full border-4 border-white shadow-lg
+                transition-all group-hover:-translate-y-2 max-w-[320px] leading-tight
               `}>
                 {cat.titulo}
               </span>

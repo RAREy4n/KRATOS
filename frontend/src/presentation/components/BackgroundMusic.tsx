@@ -48,6 +48,17 @@ export default function BackgroundMusic() {
 
     audio.addEventListener('ended', handleEnded)
 
+    // Pausa música automaticamente quando o usuário troca de aba (ex: vai pro Zeus)
+    // e retoma quando volta para o KidQuest
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        audio.pause()
+      } else if (!isMuted) {
+        audio.play().catch(() => {})
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
     if (!isMuted) {
       tryPlay()
     } else {
@@ -56,6 +67,7 @@ export default function BackgroundMusic() {
 
     return () => {
       audio.removeEventListener('ended', handleEnded)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
       window.removeEventListener('click', handleGlobalClick)
       window.removeEventListener('keydown', handleGlobalClick)
     }

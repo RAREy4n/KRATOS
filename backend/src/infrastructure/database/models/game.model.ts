@@ -79,14 +79,12 @@ const GameSessionSchema = new mongoose.Schema({
   },
   gameId: { 
     type: String, 
-    required: true, 
-    ref: 'Game' 
+    required: true
   },
   score: { 
     type: Number, 
     required: true, 
-    min: 0, 
-    max: 100 
+    min: 0
   },
   completedAt: { 
     type: Date, 

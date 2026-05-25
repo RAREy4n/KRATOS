@@ -13,6 +13,7 @@ export default function ABCGame() {
 
   const playSound = (item: string) => {
     const audio = new Audio(`/jogos/som/abc/${item}.mp3`)
+    audio.volume = 0.3
     audio.play().catch(e => console.log('Audio play failed', e))
   }
 
@@ -43,7 +44,7 @@ export default function ABCGame() {
       {/* Header */}
       <header className="relative z-10 w-full max-w-[1200px] mx-auto px-6 pt-8 flex justify-between items-center">
         <button 
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/catalogo/conversar')}
           className="bg-white/30 backdrop-blur-md text-brand-textDark rounded-full px-6 py-2 font-bold border border-white/40 hover:scale-105 transition-all"
         >
           ← Voltar

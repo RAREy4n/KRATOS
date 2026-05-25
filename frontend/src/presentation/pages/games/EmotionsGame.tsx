@@ -28,6 +28,7 @@ export default function EmotionsGame() {
 
   const playSound = (type: 'acerto' | 'erro' | 'parabens-song' | 'ploc') => {
     const audio = new Audio(`/jogos/som/${type}.mp3`)
+    audio.volume = 0.3
     audio.play().catch(e => console.log('Audio play failed', e))
   }
 

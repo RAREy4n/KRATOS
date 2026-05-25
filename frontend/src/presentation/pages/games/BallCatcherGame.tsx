@@ -44,6 +44,7 @@ export default function BallCatcherGame() {
     setScore(s => s + 10)
     setBalls(prev => prev.filter(b => b.id !== id))
     const audio = new Audio('/jogos/som/ploc.mp3')
+    audio.volume = 0.3
     audio.play().catch(() => {})
   }
 
