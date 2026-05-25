@@ -7,8 +7,18 @@ import { gameRoutes } from './presentation/routes/game.routes'
 
 await connectDatabase()
 
+// Lê as origens permitidas da variável de ambiente (separadas por vírgula)
+// Em dev: http://localhost:5173,http://localhost:5174
+// Em produção: https://kidquest.vercel.app,https://pizzaria-code.vercel.app
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173,http://localhost:5174')
+  .split(',')
+  .map(o => o.trim())
+
 const app = new Elysia()
-  .use(cors()) 
+  .use(cors({
+    origin: allowedOrigins,
+    credentials: true
+  }))
   
   .get('/', () => ({
     name: 'Organiza18 API',
