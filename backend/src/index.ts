@@ -58,6 +58,6 @@ const app = new Elysia()
   })
   
   // Iniciar servidor
-  .listen(3001)
+  .listen(Number(process.env.PORT) || 3001)
 
 console.log(`🦊 Server running at http://localhost:${app.server?.port}`)
