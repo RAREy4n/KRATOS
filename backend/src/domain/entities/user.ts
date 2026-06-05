@@ -75,7 +75,7 @@ export class User {
       name: this.name,
       email: this.email,
       role: this.role,
-      avatar: this.avatar,
+      avatar: this.avatar ?? null,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
