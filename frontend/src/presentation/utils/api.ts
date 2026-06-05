@@ -1,3 +1,5 @@
+import { API_URL } from '../../config'
+
 export const saveScore = async (category: 'aprender' | 'conversar' | 'jogar', points: number) => {
   try {
     const child = localStorage.getItem('selectedChild')
@@ -6,7 +8,7 @@ export const saveScore = async (category: 'aprender' | 'conversar' | 'jogar', po
     const { id } = JSON.parse(child)
     const token = localStorage.getItem('token')
 
-    const response = await fetch(`http://localhost:3001/children/${id}/score`, {
+    const response = await fetch(`${API_URL}/children/${id}/score`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import IconesDialog from '../components/icones_dialog'
 import { AVATARES } from '../components/avatares'  // 👈 importando a lista de avatares
+import { API_URL } from '../../config'
 
 export default function AdicionarJogador() {
   const navigate = useNavigate()
@@ -45,7 +46,7 @@ export default function AdicionarJogador() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/children', {
+      const response = await fetch(`${API_URL}/children`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
