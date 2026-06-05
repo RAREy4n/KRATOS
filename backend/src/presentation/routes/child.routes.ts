@@ -334,11 +334,11 @@ export const childRoutes = new Elysia({ prefix: '/children' })
       const childDoc = await ChildModel.findById(params.id)
       if (!childDoc) { set.status = 404; return { success: false, message: 'Child not found' }; }
       childDoc.totalPoints += points;
-      const cat = category as any;
+      const cat = category as 'aprender' | 'conversar' | 'jogar';
       if (childDoc.skills && childDoc.skills[cat]) {
-        childDoc.skills[cat].xp += points;
-        const newLevel = Math.min(5, Math.floor(childDoc.skills[cat].xp / 100) + 1);
-        if (newLevel > childDoc.skills[cat].level) childDoc.skills[cat].level = newLevel;
+        childDoc.skills[cat]!.xp += points;
+        const newLevel = Math.min(5, Math.floor(childDoc.skills[cat]!.xp / 100) + 1);
+        if (newLevel > childDoc.skills[cat]!.level) childDoc.skills[cat]!.level = newLevel;
       }
       childDoc.currentLevel = Math.floor(childDoc.totalPoints / 500) + 1;
       await childDoc.save();
