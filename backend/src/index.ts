@@ -13,10 +13,31 @@ await connectDatabase()
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173,http://localhost:5174')
   .split(',')
   .map(o => o.trim())
+  .filter(Boolean)
+
+const isAllowedOrigin = (origin?: string): boolean => {
+  if (!origin) return true
+  if (allowedOrigins.includes(origin)) return true
+
+  try {
+    const { hostname } = new URL(origin)
+
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return true
+    }
+
+    return (
+      hostname.endsWith('.vercel.app') &&
+      (hostname.startsWith('kidquest') || hostname.startsWith('zeus'))
+    )
+  } catch {
+    return false
+  }
+}
 
 const app = new Elysia()
   .use(cors({
-    origin: allowedOrigins,
+    origin: ({ headers }) => isAllowedOrigin(headers.get('origin') || undefined),
     credentials: true
   }))
   
