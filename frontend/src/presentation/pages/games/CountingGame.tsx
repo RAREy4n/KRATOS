@@ -1,49 +1,54 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
+// ─── Funções puras fora do componente ────────────────────────────────────────
+// (Math.random fora do render evita react-hooks/purity)
+
+type Apple = { id: number; top: string; left: string }
+type Level = { count: number; apples: Apple[]; options: number[] }
+
+function buildLevel(): Level {
+  const count = Math.floor(Math.random() * 9) + 1
+  const apples: Apple[] = []
+  for (let i = 0; i < count; i++) {
+    apples.push({
+      id: i,
+      top: `${Math.floor(Math.random() * 38) + 12}%`,
+      left: `${Math.floor(Math.random() * 50) + 20}%`,
+    })
+  }
+  const opts = [count]
+  while (opts.length < 4) {
+    const wrong = Math.floor(Math.random() * 9) + 1
+    if (!opts.includes(wrong)) opts.push(wrong)
+  }
+  return { count, apples, options: opts.sort(() => Math.random() - 0.5) }
+}
+
+function playSound(type: 'acerto' | 'erro' | 'parabens-song' | 'ploc') {
+  const audio = new Audio(`/jogos/som/${type}.mp3`)
+  audio.volume = 0.3
+  audio.play().catch(e => console.log('Audio play failed', e))
+}
+
+// ─── Componente ───────────────────────────────────────────────────────────────
 
 export default function CountingGame() {
   const navigate = useNavigate()
-  const [targetCount, setTargetCount] = useState(0)
-  const [apples, setApples] = useState<{ id: number; top: string; left: string }[]>([])
-  const [options, setOptions] = useState<number[]>([])
+
+  const [level, setLevel] = useState<Level>(buildLevel)
   const [showWinModal, setShowWinModal] = useState(false)
   const [isAnswered, setIsAnswered] = useState(false)
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
   const [score, setScore] = useState(0)
 
-  const playSound = (type: 'acerto' | 'erro' | 'parabens-song' | 'ploc') => {
-    const audio = new Audio(`/jogos/som/${type}.mp3`)
-    audio.volume = 0.3
-    audio.play().catch(e => console.log('Audio play failed', e))
-  }
+  const { count: targetCount, apples, options } = level
 
-  const generateLevel = () => {
-    const count = Math.floor(Math.random() * 9) + 1
-    setTargetCount(count)
-
-    const newApples = []
-    for (let i = 0; i < count; i++) {
-      newApples.push({
-        id: i,
-        top: `${Math.floor(Math.random() * 38) + 12}%`,
-        left: `${Math.floor(Math.random() * 50) + 20}%`,
-      })
-    }
-    setApples(newApples)
-
-    let opts = [count]
-    while (opts.length < 4) {
-      const wrong = Math.floor(Math.random() * 9) + 1
-      if (!opts.includes(wrong)) opts.push(wrong)
-    }
-    setOptions(opts.sort(() => Math.random() - 0.5))
+  const nextLevel = () => {
+    setLevel(buildLevel())
     setIsAnswered(false)
     setSelectedOption(null)
   }
-
-  useEffect(() => {
-    generateLevel()
-  }, [])
 
   const handleOptionClick = (num: number) => {
     if (isAnswered) return
@@ -51,11 +56,12 @@ export default function CountingGame() {
     setIsAnswered(true)
 
     if (num === targetCount) {
-      setScore(s => s + 1)
+      const newScore = score + 1
+      setScore(newScore)
       playSound('acerto')
       setTimeout(() => {
-        if (score < 4) {
-          generateLevel()
+        if (newScore < 5) {
+          nextLevel()
         } else {
           playSound('parabens-song')
           setShowWinModal(true)
@@ -96,7 +102,6 @@ export default function CountingGame() {
         <h1 className="text-xl sm:text-2xl md:text-4xl font-black text-white drop-shadow-lg text-center leading-tight">
           Contando Frutinhas
         </h1>
-        {/* Placar */}
         <div className="bg-white/30 backdrop-blur-md rounded-full px-3 py-2 border border-white/40 flex-shrink-0">
           <span className="text-white font-black text-sm md:text-base">⭐ {score}/5</span>
         </div>
